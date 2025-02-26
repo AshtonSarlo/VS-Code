@@ -345,7 +345,7 @@ Modify the previous query so that it produces a similar output but only includes
 whose names contain "X", "Y", or "Z" (or "x", "y", or "z").
 */
 
-SELECT Country, SUM(Profit) * 1.0 AS "Total Profit", Sum(Profit) * 1.0 / Count(*) AS "Profit by Sale"
+SELECT Country, SUM(Profit) * 1.0 AS "Total Profit", Sum(Profit) * 1.0 / Count(*) AS "Profit per Sale"
 FROM Orders
 WHERE Country LIKE '%x%' OR Country LIKE '%y%' OR COUNTRY LIKE '%z%'
 GROUP BY "Profit per Sale" DESC;
@@ -355,9 +355,9 @@ Modify the previous query so that it produces a similar output for the previousl
 countries but only includes those where either total profit or profit per sale is negative.
 */
 
-SELECT Country, SUM(Profit) * 1.0 AS "Total Profit", SUM(Profit) * 1.0 AS "Total Profit", SUM(Profit) * 1.0 / Count(*) AS "Profit per Sale"
+SELECT Country, SUM(Profit) * 1.0 AS "Total Profit", SUM(Profit) * 1.0 / Count(*) AS "Profit per Sale"
 FROM Orders
-WHERE "Total Profit" < 0 OR "Profit per Sale" < 0
+WHERE SUM(Total Profit) < 0 OR "Profit per Sale" < 0
 GROUP BY "Profit Per Sale" DESC;
 
 /*
@@ -386,3 +386,4 @@ GROUP BY Country, Year
 Modify the previous query to report the total number of units sold, total sales, sales per
 unit, total profit, and profit per unit on a monthly basis within each year for the chosen
 countries. Order the results in ascending order by country, year, and month.
+*/
