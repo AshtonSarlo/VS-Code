@@ -417,4 +417,43 @@ FROM Orders
 GROUP BY Region, Year
 ORDER BY Region, Year ASC;
 
+/*
+Retrieve the total number of units sold, total sales, sales per unit, total profit, and profit
+per unit for each region and regional manager (using the column "Person") on an annual
+basis. Assign meaningful aliases. Order the results in ascending order by region, regional
+manager, and year.
+*/
 
+SELECT 
+    O.Region, 
+    P.Person, 
+    SUBSTR(OrderID, 1, 4) AS Year,
+    SUM(O.Quantity) AS "Total Units Sold", SUM(O.Sales) AS "Total Sales", SUM(O.Sales) * 1.0 / SUM(O.Quantity) AS "Sales per Unit",
+    SUM(O.Profit) * 1.0 / SUM(O.Quantity) AS "Profit per Unit"
+FROM Orders O
+JOIN People P ON O.Region = P.Region
+GROUP BY O.Region, P.Person, Year
+ORDER BY O.Region, P.Person, Year ASC;
+
+/*
+Retrieve the lost total profit from returned items for each region and regional manager
+over all years. Assign the alias "Lost Total Profit" to the lost profit column. Sort the results
+in descending order by lost total profit. Export the results to a CSV file named
+"LostProfitByRegion.csv". After executing the query, reset the output mode to column and
+redirect the output back to the terminal.
+*/
+
+.output LostProfitByRegion.csv
+
+SELECT 
+    O.Region,
+    P.Person,
+    SUM(O.Profit) * -1 AS "Lost Total Profit"
+FROM Orders O
+JOIN Returns R ON O.OrderID = R.OrderID
+JOIN People P ON O.Region = P.Region
+GROUP BY O.Region, P.Person
+ORDER BY "Lost Total Profit" DESC;
+
+.output stdout
+.mode column
