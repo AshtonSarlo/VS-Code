@@ -388,3 +388,33 @@ unit, total profit, and profit per unit on a monthly basis within each year for 
 countries. Order the results in ascending order by country, year, and month.
 */
 
+SELECT 
+    Country,
+    SUBSTR(OrderID, 1, 4) AS Year,
+    SUBSTR(OrderDate, 6, 2) AS Month,
+    SUM(Quantity) AS "Total Quantity", SUM(Sales) AS "Total Sales", SUM(Sales) * 1.0 / SUM(Quantity) AS "Sales per Unit", SUM(Profit) * 1.0 / SUM(Quantity) AS "Profit per Unit"
+FROM Orders;
+
+/*
+Retrieve all unique regions contained in the database (using the column "Region") and
+determine the total number of units sold, total sales, sales per unit, total profit, and profit
+per unit for each region over all years. Assign meaningful aliases.
+*/
+
+SELECT Region, SUM(Quantity) AS "Total Quantity Per Region", SUM(Sales) AS "Total Sales Per Region", SUM(Sales) * 1.0 / SUM(Quantity) AS "Sales per Unit Per Region",
+        SUM(Profit) * 1.0 / SUM(Quantity) AS "Profit per Unit Per Region"
+FROM Orders;
+
+/*
+Modify the previous query to report the total number of units sold, total sales, sales per
+unit, total profit, and profit per unit on an annual basis for each region. Order the results
+in ascending order by region and year.
+*/
+
+SELECT Region, SUBSTR(OrderID, 1, 4) AS Year, SUM(Quantity) AS "Total Quantity Per Region", SUM(Sales) AS "Total Sales Per Region", SUM(Sales) * 1.0 / SUM(Quantity) AS "Sales per Unit Per Region",
+        SUM(Profit) * 1.0 / SUM(Quantity) AS "Profit per Unit Per Region"
+FROM Orders
+GROUP BY Region, Year
+ORDER BY Region, Year ASC;
+
+
