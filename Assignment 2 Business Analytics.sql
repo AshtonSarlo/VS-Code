@@ -387,3 +387,4 @@ Modify the previous query to report the total number of units sold, total sales,
 unit, total profit, and profit per unit on a monthly basis within each year for the chosen
 countries. Order the results in ascending order by country, year, and month.
 */
+
