@@ -219,11 +219,11 @@ SELECT
     WHEN (Pop * 1.0 / Area) < 50 THEN 'Low'
     WHEN (Pop * 1.0 / Area) BETWEEN 50 AND 100 THEN 'Medium'
     ELSE 'High'
-  END AS Density,
-  SUM(Pop) AS TotalPopulation,
-  ROUND(AVG(Area), 2) AS AverageArea
+  END AS DensityRange,
+  SUM(Pop) AS TotPop,
+  ROUND(AVG(Area), 2) AS AvgArea
 FROM Stats
-GROUP BY Density;
+GROUP BY DensityRange;
 
 /*
 Modify the previous query so that it produces a similar output for the previously identified
@@ -235,11 +235,11 @@ SELECT
     WHEN (Pop * 1.0 / Area) < 50 THEN 'Low'
     WHEN (Pop * 1.0 / Area) BETWEEN 50 AND 100 THEN 'Medium'
     ELSE 'High'
-  END AS Density,
-  SUM(Pop) AS TotalPopulation,
-  ROUND(AVG(Area), 2) AS AverageArea
+  END AS DensityRange,
+  SUM(Pop) AS TotPop,
+  ROUND(AVG(Area), 2) AS AvgArea
 FROM Stats
-GROUP BY Density
+GROUP BY DensityRange
 HAVING SUM(Pop) > 100000000;
 
 /*
@@ -448,7 +448,7 @@ redirect the output back to the terminal.
 SELECT 
     O.Region,
     P.Person,
-    SUM(O.Profit) * -1 AS "Lost Total Profit"
+    SUM(O.Profit) * -1 AS "Lost Total"
 FROM Orders O
 JOIN Returns R ON O.OrderID = R.OrderID
 JOIN People P ON O.Region = P.Region
