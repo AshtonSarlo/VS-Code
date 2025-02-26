@@ -357,3 +357,29 @@ FROM Orders
 WHERE "Total Profit" < 0 OR "Profit per Sale" < 0
 GROUP BY "Profit Per Sale" DESC;
 
+/*
+From the full set of countries, choose three countries and determine the total number of
+units sold (using the "Quantity" column), total sales, sales per unit, total profit, and profit
+per unit for each country. Assign meaningful aliases.
+*/
+
+SELECT Country, SUM(Quantity) AS "Total Quantity", SUM(Sales) AS "Total Sales", SUM(Sales) * 1.0 / Sum(Quantity) AS "Sales per Unit",
+        SUM(Profit) * 1.0 / Sum(Quantity) AS "Profit per Unit"
+FROM Orders
+
+/*
+Modify the previous query to report the total number of units sold, total sales, sales per
+unit, total profit, and profit per unit on an annual basis for the chosen countries, extracting
+the year from either "Order ID" or "Order Date". Order the results in ascending order by
+country and year and assign meaningful aliases.
+*/
+
+SELECT Country, SUBSTR(OrderID, 1, 4) AS Year, SUM(Quantity) AS "Total Quantity", SUM(Sales) AS "Total Sales", SUM(Sales) * 1.0 / SUM(Quantity) AS "Sales per Unit",
+        SUM(Profit) * 1.0 / SUM(Quantity) AS "Profit per Unit"
+FROM Orders
+GROUP BY Country, Year
+
+/*
+Modify the previous query to report the total number of units sold, total sales, sales per
+unit, total profit, and profit per unit on a monthly basis within each year for the chosen
+countries. Order the results in ascending order by country, year, and month.
