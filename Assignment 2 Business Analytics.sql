@@ -330,7 +330,7 @@ whose names contain "X", "Y", or "Z" (or "x", "y", or "z")
 SELECT Country, COUNT(*) AS "Number of Sales"
 FROM Orders
 WHERE Country LIKE '%x%' OR Country LIKE '%y%' OR Country LIKE '%z%'
-GROUP BY Country
+GROUP BY Country;
 
 /*
 For each of the countries identified in the previous query, determine the total profit and
@@ -350,17 +350,21 @@ whose names contain "X", "Y", or "Z" (or "x", "y", or "z").
 SELECT Country, SUM(Profit) * 1.0 AS "Total Profit", Sum(Profit) * 1.0 / Count(*) AS "Profit per Sale"
 FROM Orders
 WHERE Country LIKE '%x%' OR Country LIKE '%y%' OR COUNTRY LIKE '%z%'
-GROUP BY "Profit per Sale" DESC;
+ORDER BY "Profit per Sale" DESC;
 
 /*
 Modify the previous query so that it produces a similar output for the previously identified
 countries but only includes those where either total profit or profit per sale is negative.
 */
 
-SELECT Country, SUM(Profit) * 1.0 AS "Total Profit", SUM(Profit) * 1.0 / Count(*) AS "Profit per Sale"
+SELECT Country, 
+       SUM(Profit) * 1.0 AS "Total Profit", SUM(Profit) * 1.0 / COUNT(*) AS "Profit per Sale"
 FROM Orders
-WHERE SUM(Total Profit) < 0 OR "Profit per Sale" < 0
-GROUP BY "Profit Per Sale" DESC;
+WHERE Country LIKE '%x%' OR Country LIKE '%y%' OR Country LIKE '%z%'
+GROUP BY Country
+HAVING "Total Profit" < 0 OR "Profit per Sale" < 0
+ORDER BY "Profit per Sale" DESC;
+
 
 /*
 From the full set of countries, choose three countries and determine the total number of
@@ -371,6 +375,8 @@ per unit for each country. Assign meaningful aliases.
 SELECT Country, SUM(Quantity) AS "Total Quantity", SUM(Sales) AS "Total Sales", SUM(Sales) * 1.0 / Sum(Quantity) AS "Sales per Unit",
         SUM(Profit) * 1.0 / Sum(Quantity) AS "Profit per Unit"
 FROM Orders
+WHERE Country IN ('Mexico', 'China', 'Italy')
+GROUP BY Country;
 
 /*
 Modify the previous query to report the total number of units sold, total sales, sales per
@@ -379,10 +385,14 @@ the year from either "Order ID" or "Order Date". Order the results in ascending 
 country and year and assign meaningful aliases.
 */
 
-SELECT Country, SUBSTR(OrderID, 1, 4) AS Year, SUM(Quantity) AS "Total Quantity", SUM(Sales) AS "Total Sales", SUM(Sales) * 1.0 / SUM(Quantity) AS "Sales per Unit",
-        SUM(Profit) * 1.0 / SUM(Quantity) AS "Profit per Unit"
+SELECT Country, 
+       SUBSTR(OrderID, 1, 4) AS Year, SUM(Quantity) AS "Total Quantity", SUM(Sales) AS "Total Sales", 
+       SUM(Sales) * 1.0 / SUM(Quantity) AS "Sales per Unit", SUM(Profit) * 1.0 / SUM(Quantity) AS "Profit per Unit"
 FROM Orders
+WHERE Country IN ('Mexico', 'China', 'Italy')
 GROUP BY Country, Year
+ORDER BY Country, Year ASC;
+
 
 /*
 Modify the previous query to report the total number of units sold, total sales, sales per
@@ -392,10 +402,12 @@ countries. Order the results in ascending order by country, year, and month.
 
 SELECT 
     Country,
-    SUBSTR(OrderID, 1, 4) AS Year,
-    SUBSTR(OrderDate, 6, 2) AS Month,
-    SUM(Quantity) AS "Total Quantity", SUM(Sales) AS "Total Sales", SUM(Sales) * 1.0 / SUM(Quantity) AS "Sales per Unit", SUM(Profit) * 1.0 / SUM(Quantity) AS "Profit per Unit"
-FROM Orders;
+    SUBSTR(OrderID, 1, 4) AS Year, SUBSTR(OrderDate, 6, 2) AS Month, SUM(Quantity) AS "Total Quantity", 
+    SUM(Sales) AS "Total Sales", SUM(Sales) * 1.0 / SUM(Quantity) AS "Sales per Unit", SUM(Profit) * 1.0 / SUM(Quantity) AS "Profit per Unit"
+FROM Orders
+WHERE Country IN ('Mexico', 'China', 'Italy')
+GROUP BY Country, Year, Month
+ORDER BY Country, Year, Month ASC;
 
 /*
 Retrieve all unique regions contained in the database (using the column "Region") and
@@ -405,7 +417,8 @@ per unit for each region over all years. Assign meaningful aliases.
 
 SELECT Region, SUM(Quantity) AS "Total Quantity Per Region", SUM(Sales) AS "Total Sales Per Region", SUM(Sales) * 1.0 / SUM(Quantity) AS "Sales per Unit Per Region",
         SUM(Profit) * 1.0 / SUM(Quantity) AS "Profit per Unit Per Region"
-FROM Orders;
+FROM Orders
+GROUP BY Region;
 
 /*
 Modify the previous query to report the total number of units sold, total sales, sales per
@@ -413,8 +426,10 @@ unit, total profit, and profit per unit on an annual basis for each region. Orde
 in ascending order by region and year.
 */
 
-SELECT Region, SUBSTR(OrderID, 1, 4) AS Year, SUM(Quantity) AS "Total Quantity Per Region", SUM(Sales) AS "Total Sales Per Region", SUM(Sales) * 1.0 / SUM(Quantity) AS "Sales per Unit Per Region",
-        SUM(Profit) * 1.0 / SUM(Quantity) AS "Profit per Unit Per Region"
+SELECT 
+    Region, 
+    SUBSTR(OrderDate, 1, 4) AS Year, SUM(Quantity) AS "Total Quantity Per Region", SUM(Sales) AS "Total Sales Per Region", 
+    SUM(Sales) * 1.0 / SUM(Quantity) AS "Sales per Unit Per Region", SUM(Profit) * 1.0 / SUM(Quantity) AS "Profit per Unit Per Region"
 FROM Orders
 GROUP BY Region, Year
 ORDER BY Region, Year ASC;
