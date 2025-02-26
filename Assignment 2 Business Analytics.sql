@@ -31,6 +31,7 @@ CREATE TABLE Capitals (
 
 /*
 Verify the structure of each table, once using a dot command, and once using a SQL command.
+
 Display the names of all tables in the database, once using a dot command and once using a SQL command.
 */
 
@@ -46,6 +47,7 @@ SELECT name FROM sqlite_master WHERE type='table';
 
 /*
 Import data from the provided files into their respective tables.
+
 Retrieve the first two rows of each table to confirm that the data was imported correctly.
 */
 
@@ -80,7 +82,7 @@ LIMIT 1;
 Count the number of states where population density (population divided by land area) below 50 people per square kilometer.
 */
 
-SELECT COUNT(*) AS Count_LowDensity
+SELECT COUNT(*) AS LowDensity
 FROM Stats
 WHERE (Pop * 1.0 / Area) < 50;
 
@@ -217,26 +219,27 @@ SELECT
     WHEN (Pop * 1.0 / Area) < 50 THEN 'Low'
     WHEN (Pop * 1.0 / Area) BETWEEN 50 AND 100 THEN 'Medium'
     ELSE 'High'
-  END AS DensityRange,
-  SUM(Pop) AS TotPop,
-  ROUND(AVG(Area), 2) AS AvgArea
+  END AS Density,
+  SUM(Pop) AS TotalPopulation,
+  ROUND(AVG(Area), 2) AS AverageArea
 FROM Stats
-GROUP BY DensityRange;
+GROUP BY Density;
 
 /*
 Modify the previous query so that it produces a similar output for the previously identified
 categories but only includes those where the total population exceeds 100 million.
 */
+
 SELECT 
   CASE
     WHEN (Pop * 1.0 / Area) < 50 THEN 'Low'
     WHEN (Pop * 1.0 / Area) BETWEEN 50 AND 100 THEN 'Medium'
     ELSE 'High'
-  END AS DensityRange,
-  SUM(Pop) AS TotPop,
-  ROUND(AVG(Area), 2) AS AvgArea
+  END AS Density,
+  SUM(Pop) AS TotalPopulation,
+  ROUND(AVG(Area), 2) AS AverageArea
 FROM Stats
-GROUP BY DensityRange
+GROUP BY Density
 HAVING SUM(Pop) > 100000000;
 
 /*
